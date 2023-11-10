@@ -5,7 +5,9 @@ const Nav = () => {
   return (
     <nav>
       <li>
-        <h1 className="title">EventHero</h1>
+        <Link to={`/`} style={{ textDecoration: "none" }}>
+          <h1 className="title">EventHero</h1>
+        </Link>
       </li>
       <li>
         <Link to={`/register`}>
@@ -30,11 +32,20 @@ const Trust = () => {
     <div className="trust-container">
       <h4 className="trust-text">Trusted By</h4>
       <div className="trust-logo-container">
-        <img src="/img/yps.png" alt="Youth Pioneer Society Logo" />
-        <img src="/img/aubh.png" alt="American University of Bahrain Logo" />
+        <img
+          src="/img/yps.png"
+          alt="Youth Pioneer Society Logo"
+          className="trust-logo"
+        />
+        <img
+          src="/img/aubh.png"
+          alt="American University of Bahrain Logo"
+          className="trust-logo"
+        />
         <img
           src="/img/mys.png"
           alt="Ministry of Youth and Sport Affairs Logo"
+          className="trust-logo"
         />
       </div>
     </div>

@@ -1,4 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
+a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* Background */
+
 body {
   background-image: radial-gradient(
     circle at 1px 1px,
@@ -24,7 +34,7 @@ nav > li {
   display: inline;
 }
 
-h1 {
+.title {
   font-weight: 900;
   font-size: 48px;
   background-color: #eeeff3;
@@ -47,9 +57,26 @@ h1 {
 
 .join-button:hover {
   cursor: pointer;
-  background-color: #8fd140; /* Change the color for hover */
-  box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.3); /* Change the box-shadow for hover */
+  background-color: #8fd140;
+  box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.3);
 }
+
+/* 
+
+  HOME PAGE 
+
+*/
+
+.home-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  grid-template-areas:
+    "nav  nav"
+    "main showcase"
+    "trust  showcase";
+}
+
 /* Main Div Styling */
 
 .main-container {
@@ -63,19 +90,19 @@ h1 {
   box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.25);
 }
 
-.main-container > h2,
-.main-container > h3 {
+.main-subheadline,
+.main-headline {
   margin: 0;
   padding: 0;
 }
 
-.main-container > h2 {
+.main-headline {
   font-size: 96px;
   font-weight: 900;
   color: white;
 }
 
-.main-container > h3 {
+.main-subheadline {
   text-align: right;
   font-weight: 900;
   font-size: 64px;
@@ -97,7 +124,7 @@ h1 {
   justify-self: center;
 }
 
-.trust-container > h4 {
+.trust-text {
   font-weight: 900;
   font-size: 40px;
   color: #433b3b;
@@ -109,7 +136,7 @@ h1 {
   justify-content: space-around;
 }
 
-.trust-container img {
+.trust-logo {
   width: 20%;
 }
 /* Showcase Styling */
@@ -132,12 +159,156 @@ h1 {
   width: 800px;
 }
 
-.home-page {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  grid-template-areas:
-    "nav  nav"
-    "main showcase"
-    "trust  showcase";
+/* 
+
+  REGISTRATION PAGE 
+
+*/
+
+/* Register Container Styling */
+
+.register-container {
+  display: flex;
+  margin: auto;
+  height: 600px;
+  padding: 20px;
+  justify-content: space-around;
+  width: 70%;
+  background-color: #e1e2f3;
+  border-radius: 70px;
+  min-width: 800px;
+}
+
+.sign-up,
+.sign-in {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+/* Heading Text */
+.register-head {
+  font-weight: 900;
+  font-size: 40px;
+  color: black;
+  align-self: center;
+  margin: 10px;
+}
+
+/* Input Styling */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.input-label {
+  color: black;
+  background-color: #e1e2f3;
+  font-size: 15px;
+  position: absolute;
+  left: 25px;
+  top: -7px;
+  padding: 0 2px;
+}
+
+.input {
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px #000000 solid;
+  padding: 8px;
+  border-radius: 200px;
+  width: 100%;
+  text-indent: 5px;
+  font-size: 18px;
+}
+
+.short {
+  width: 45%;
+  align-self: center;
+}
+
+.short > input {
+  width: 100%;
+}
+
+.name {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Social Buttons Styling */
+
+.social-signin {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.google-logo {
+  width: 25px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: black;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  outline: none;
+  width: 103%;
+  height: 35%;
+  font-size: 15px;
+}
+
+.apple-logo {
+  margin-right: 8px;
+  width: 10%;
+}
+
+.apple-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  width: 103%;
+  height: 35%;
+  font-size: 15px;
+}
+
+.divider {
+  border: 1px solid #acacac;
+  margin: 60px 0px;
+}
+
+/* Register Button Styling */
+.register-button {
+  background-color: #b1f041;
+  width: 300px;
+  height: 40px;
+  align-self: center;
+  border: none;
+  border-radius: 10px;
+  font-size: 26px;
+  box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.25);
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.register-button:hover {
+  cursor: pointer;
+  background-color: #8fd140;
+  box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.3);
 }
