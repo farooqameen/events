@@ -1,17 +1,21 @@
+import { Link } from "react-router-dom";
 import "./style.css";
 
 const Nav = () => {
   return (
     <nav>
       <li>
-        <h3 className="title">EventHero</h3>
+        <h1 className="title">EventHero</h1>
       </li>
-      <li className="join-button">
-        <button>Join</button>
+      <li>
+        <Link to={`/register`}>
+          <button className="join-button">Join</button>
+        </Link>
       </li>
     </nav>
   );
 };
+
 const Main = () => {
   return (
     <div className="main-container">
@@ -20,6 +24,7 @@ const Main = () => {
     </div>
   );
 };
+
 const Trust = () => {
   return (
     <div className="trust-container">
