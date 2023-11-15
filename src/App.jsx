@@ -3,8 +3,11 @@ import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Home";
-import "./style.css";
 import Registration from "./Registration";
+import Dashboard from "./Dashboard";
+import Browse from "./Browse";
+import Registered from "./Registered";
+import Profile from "./Profile";
 
 const App = () => {
   return (
@@ -12,6 +15,10 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/register" element={<Registration />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
+          <Route path="/browse/*" element={<Browse />} />
+          <Route path="/registered/*" element={<Registered />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </BrowserRouter>
