@@ -136,3 +136,4 @@ const Registration = () => {
 };
 
 export default Registration;
+export { Input, ShortInput, OptionInput, EmploymentOptions, GenderOptions };
