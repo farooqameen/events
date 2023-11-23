@@ -8,6 +8,7 @@ import Dashboard from "./Dashboard";
 import Browse from "./Browse";
 import Registered from "./Registered";
 import Profile from "./Profile";
+import CardInfo from "./CardInfo";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/register" element={<Registration />} />
+          <Route path="/info" element={<CardInfo />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/browse/*" element={<Browse />} />
           <Route path="/registered/*" element={<Registered />} />
