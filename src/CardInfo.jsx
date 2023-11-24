@@ -1,6 +1,15 @@
-import { event } from "./info";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
+import { db, auth } from "./firebase";
 
 const ShortInput = (props) => {
   return (
@@ -21,6 +30,21 @@ const ShortInput = (props) => {
 };
 
 const Info = (props) => {
+  const navigate = useNavigate();
+
+  const registerEvent = async (e) => {
+    e.preventDefault();
+    try {
+      const user = auth.currentUser;
+      const EventRef = doc(db, "events", props.event.id);
+      await updateDoc(EventRef, {
+        participants: arrayUnion(user.uid),
+      });
+      navigate(-1);
+    } catch {
+      console.log("Something went wrong");
+    }
+  };
   return (
     <div className="card-info-container">
       <h2 className="card-info-title">{props.event.title}</h2>
@@ -46,13 +70,13 @@ const Info = (props) => {
         for="date"
         label="Date"
         type="date"
-        value={props.event.dateUTC}
+        value={props.event.date}
       />
       <ShortInput
         for="starttime"
         label="Start Time"
         type="time"
-        value={props.event.time}
+        value={props.event.startTime}
       />
       <ShortInput
         for="endtime"
@@ -66,7 +90,9 @@ const Info = (props) => {
         type="text"
         value={props.event.place}
       />
-      <button className="event-det-but">Register</button>
+      <button className="event-det-but" onClick={(e) => registerEvent(e)}>
+        Register
+      </button>
     </div>
   );
 };
@@ -74,25 +100,36 @@ const Info = (props) => {
 const CardInfo = () => {
   let det = useParams();
   const navigate = useNavigate();
-  return (
-    <>
-      <Info event={event} />
-      {useEffect(() => {
-        const handleClickOutside = (event) => {
-          if (det.eventId && !event.target.closest(".event-details")) {
-            navigate(-1);
-          }
-        };
-        const delay = setTimeout(() => {
-          document.addEventListener("click", handleClickOutside);
-        }, 1);
-        return () => {
-          clearTimeout(delay);
-          document.removeEventListener("click", handleClickOutside);
-        };
-      }, [navigate])}
-    </>
-  );
+  const [event, setEvent] = useState({});
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (det.eventId && !event.target.closest(".event-details")) {
+        navigate(-1);
+      }
+    };
+    const fetchEvents = async () => {
+      const eventsQuery = query(
+        collection(db, "events"),
+        where("id", "==", det.eventId),
+      );
+      const eventsDoc = await getDocs(eventsQuery);
+      const fetchedEvents = [];
+      eventsDoc.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        fetchedEvents.push(doc.data());
+      });
+      setEvent(fetchedEvents);
+    };
+    fetchEvents();
+    const delay = setTimeout(() => {
+      document.addEventListener("click", handleClickOutside);
+    }, 1);
+    return () => {
+      clearTimeout(delay);
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [navigate]);
+  return <>{Object.keys(event).length > 0 && <Info event={event[0]} />}</>;
 };
 
 export default CardInfo;

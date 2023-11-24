@@ -603,6 +603,8 @@ nav li:has(img) {
   width: 45%;
   height: 30%;
   margin-bottom: 30px;
+  min-width: 655px;
+  min-height: 350px;
 }
 
 /* 

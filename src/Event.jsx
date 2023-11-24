@@ -16,10 +16,10 @@ const Event = (props) => {
             <h4>{props.event.org.name}</h4>
           </div>
           <div className="event-date">
-            Starts: {props.event.date} at {props.event.time}
+            Starts: {props.event.date} at {props.event.startTime}
           </div>
         </div>
-        <Link to={`1`}>
+        <Link to={`${props.event.id}`}>
           <button className={props.class + "-button"}>{props.blabel}</button>
         </Link>
       </div>
