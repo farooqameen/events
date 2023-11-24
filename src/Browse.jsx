@@ -1,6 +1,10 @@
 import Nav from "./Nav";
-import { event, user } from "./info";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { user } from "./info";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, query, getDocs, orderBy } from "firebase/firestore";
+import { auth, db } from "./firebase";
 
 const EventContainer = (props) => {
   return (
@@ -16,10 +20,10 @@ const EventContainer = (props) => {
           <h4>{props.event.org.name}</h4>
         </div>
         <div className="event-date">
-          Starts: {props.event.date} at {props.event.time}
+          Starts: {props.event.date} at {props.event.startTime}
         </div>
       </div>
-      <Link to={`1`}>
+      <Link to={`${props.event.id}`}>
         <button className={props.class + "-button"}>{props.blabel}</button>
       </Link>
     </div>
@@ -39,6 +43,41 @@ const Search = () => {
 
 const Browse = () => {
   let det = useParams();
+  const navigate = useNavigate();
+  const [events, setEvents] = useState([]);
+  const [uid, setUid] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid); // Set uid in state
+        console.log(user.uid);
+      } else {
+        navigate("/");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const upcomingEventQuery = query(
+        collection(db, "events"),
+        orderBy("date"),
+      );
+      const upcomingEventDoc = await getDocs(upcomingEventQuery);
+      const fetchedEvents = [];
+      upcomingEventDoc.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        fetchedEvents.push(doc.data());
+      });
+      setEvents(fetchedEvents);
+    };
+    if (uid) {
+      fetchEvents();
+    }
+  }, [uid, navigate]);
   return (
     <>
       <div className={`${det.eventId ? "blur" : ""}`}>
@@ -46,10 +85,15 @@ const Browse = () => {
         <div className="breg-page">
           <Search />
           <div className="events">
-            <EventContainer class="upcoming" blabel="Register" event={event} />
-            <EventContainer class="upcoming" blabel="Register" event={event} />
-            <EventContainer class="upcoming" blabel="Register" event={event} />
-            <EventContainer class="upcoming" blabel="Register" event={event} />
+            {events.map((event) => (
+              <EventContainer
+                key={event.id}
+                class="upcoming"
+                size="regular"
+                blabel="Register"
+                event={event}
+              />
+            ))}
           </div>
         </div>
       </div>
