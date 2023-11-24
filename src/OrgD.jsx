@@ -1,14 +1,49 @@
-import Nav from "./Nav";
-import { event, user } from "./info";
+import {
+  Link,
+  NavLink,
+  useParams,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
 import { EventContainer, Search } from "./Browse";
-import { Outlet, useParams } from "react-router-dom";
+import { event } from "./info";
 
-const Registered = () => {
+const Nav = () => {
+  return (
+    <nav>
+      <li>
+        <NavLink to={`/`} className="nav-link">
+          <h1 className="title">EventHero</h1>
+        </NavLink>
+      </li>
+      <div className="nav-items">
+        <li>
+          <NavLink to={"/org"} className="nav-link">
+            <h2 className="nav-item">Dashboard</h2>
+          </NavLink>
+        </li>
+      </div>
+      <li>
+        <Link to={`new`}>
+          <button className="create-button">Create Event</button>
+        </Link>
+      </li>
+    </nav>
+  );
+};
+
+const OrgD = () => {
   let det = useParams();
+  let location = useLocation();
+  console.log(location);
   return (
     <>
-      <div className={`${det.eventId ? "blur" : ""}`}>
-        <Nav user={user} />
+      <div
+        className={`${
+          det.eventId || location.pathname.includes("new") ? "blur" : ""
+        }`}
+      >
+        <Nav />
         <div className="breg-page">
           <Search />
           <div className="events">
@@ -39,7 +74,7 @@ const Registered = () => {
           </div>
         </div>
       </div>
-      {det.eventId && (
+      {(det.eventId || location.pathname.includes("new")) && (
         <div className="event-details">
           <Outlet />
         </div>
@@ -48,4 +83,4 @@ const Registered = () => {
   );
 };
 
-export default Registered;
+export default OrgD;

@@ -19,7 +19,7 @@ const Event = (props) => {
             Starts: {props.event.date} at {props.event.time}
           </div>
         </div>
-        <Link to={`/info`}>
+        <Link to={`1`}>
           <button className={props.class + "-button"}>{props.blabel}</button>
         </Link>
       </div>

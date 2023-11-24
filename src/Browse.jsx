@@ -1,6 +1,6 @@
 import Nav from "./Nav";
 import { event, user } from "./info";
-import { Link } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 
 const EventContainer = (props) => {
   return (
@@ -19,39 +19,46 @@ const EventContainer = (props) => {
           Starts: {props.event.date} at {props.event.time}
         </div>
       </div>
-      <Link to={`/`}>
+      <Link to={`1`}>
         <button className={props.class + "-button"}>{props.blabel}</button>
       </Link>
     </div>
   );
 };
 
-const Search = (props) => {
+const Search = () => {
   return (
     <div className="input-group search">
       <label htmlFor="search" className="input-label">
-        {props.label}
+        Search
       </label>
-      <i className="fa-solid fa-magnifying-glass"></i>
-      <input type="search" name="search" id="search" className="input" />
+      <input type="text" name="search" id="search" className="input" />
     </div>
   );
 };
 
 const Browse = () => {
+  let det = useParams();
   return (
-    <div>
-      <Nav user={user} />
-      <div className="breg-page">
-        <Search />
-        <div className="events">
-          <EventContainer class="upcoming" blabel="Register" event={event} />
-          <EventContainer class="upcoming" blabel="Register" event={event} />
-          <EventContainer class="upcoming" blabel="Register" event={event} />
-          <EventContainer class="upcoming" blabel="Register" event={event} />
+    <>
+      <div className={`${det.eventId ? "blur" : ""}`}>
+        <Nav user={user} />
+        <div className="breg-page">
+          <Search />
+          <div className="events">
+            <EventContainer class="upcoming" blabel="Register" event={event} />
+            <EventContainer class="upcoming" blabel="Register" event={event} />
+            <EventContainer class="upcoming" blabel="Register" event={event} />
+            <EventContainer class="upcoming" blabel="Register" event={event} />
+          </div>
         </div>
       </div>
-    </div>
+      {det.eventId && (
+        <div className="event-details">
+          <Outlet />
+        </div>
+      )}
+    </>
   );
 };
 

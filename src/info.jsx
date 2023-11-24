@@ -10,6 +10,7 @@ const event = {
   dateUTC: "2023-10-18",
   time: "17:00:00",
   endTime: "20:00:00",
+  place: "The Diplomat Radisson Blu Hotel",
   description: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus id ducimus non, maxime consequatur error praesentium veniam illo labore at.
   Dignissimos alias earum numquam voluptate! Odio cum reiciendis beatae voluptatem consectetur eligendi. Neque quam dolorem eius minus. Delectus, cumque ut!
   Nam tempora numquam illum aliquid neque exercitationem ratione placeat sunt atque nobis vitae amet, repellendus eum mollitia veritatis incidunt ut!
