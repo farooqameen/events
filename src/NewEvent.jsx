@@ -1,6 +1,21 @@
-import { event } from "./info";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+const Input = (props) => {
+  return (
+    <div className="input-group">
+      <label className="input-label" htmlFor={props.for}>
+        {props.label}
+      </label>
+      <input
+        type={props.type}
+        name={props.for}
+        id={props.for}
+        className="input"
+      />
+    </div>
+  );
+};
 
 const ShortInput = (props) => {
   return (
@@ -12,22 +27,16 @@ const ShortInput = (props) => {
         type={props.type}
         name={props.for}
         id={props.for}
-        value={props.value}
         className="input"
-        readOnly
       />
     </div>
   );
 };
 
-const Info = (props) => {
+const Info = () => {
   return (
     <div className="card-info-container">
-      <h2 className="card-info-title">{props.event.title}</h2>
-      <div className="org-info">
-        <img src={props.event.org.logo} alt="" />
-        <h4>{props.event.org.name}</h4>
-      </div>
+      <Input for="title" label="Title" type="text" />
       <div className="input-group">
         <label className="input-label" htmlFor="description">
           Description
@@ -38,48 +47,29 @@ const Info = (props) => {
           id="description"
           rows="10"
           cols="100"
-          value={props.event.description}
-          readOnly
         ></textarea>
       </div>
-      <ShortInput
-        for="date"
-        label="Date"
-        type="date"
-        value={props.event.dateUTC}
-      />
-      <ShortInput
-        for="starttime"
-        label="Start Time"
-        type="time"
-        value={props.event.time}
-      />
-      <ShortInput
-        for="endtime"
-        label="End Time"
-        type="time"
-        value={props.event.endTime}
-      />
-      <ShortInput
-        for="place"
-        label="Venue"
-        type="text"
-        value={props.event.place}
-      />
-      <button className="event-det-but">Register</button>
+      <ShortInput for="date" label="Date" type="date" />
+      <ShortInput for="starttime" label="Start Time" type="time" />
+      <ShortInput for="endtime" label="End Time" type="time" />
+      <ShortInput for="place" label="Venue" type="text" />
+      <button className="event-det-but">Create Event</button>
     </div>
   );
 };
 
-const CardInfo = () => {
-  let det = useParams();
+const NewEvent = () => {
+  let location = useLocation();
   const navigate = useNavigate();
   return (
     <>
-      <Info event={event} />
+      <Info />
       {useEffect(() => {
         const handleClickOutside = (event) => {
-          if (det.eventId && !event.target.closest(".event-details")) {
+          if (
+            location.pathname.includes("new") &&
+            !event.target.closest(".event-details")
+          ) {
             navigate(-1);
           }
         };
@@ -95,4 +85,4 @@ const CardInfo = () => {
   );
 };
 
-export default CardInfo;
+export default NewEvent;

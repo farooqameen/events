@@ -1,7 +1,6 @@
 import Nav from "./Nav";
 import { user } from "./info";
 import {
-  Input,
   ShortInput,
   OptionInput,
   EmploymentOptions,
@@ -23,8 +22,6 @@ const Information = () => {
         label="Employment"
         options={EmploymentOptions}
       />
-      <Input for="email-signup" label="Email" type="email" />
-      <Input for="password-signup" label="Password" type="password" />
       <button className="save-button">Save Information</button>
     </div>
   );

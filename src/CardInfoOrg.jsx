@@ -12,9 +12,8 @@ const ShortInput = (props) => {
         type={props.type}
         name={props.for}
         id={props.for}
-        value={props.value}
+        defaultValue={props.defaultValue}
         className="input"
-        readOnly
       />
     </div>
   );
@@ -38,40 +37,39 @@ const Info = (props) => {
           id="description"
           rows="10"
           cols="100"
-          value={props.event.description}
-          readOnly
+          defaultValue={props.event.description}
         ></textarea>
       </div>
       <ShortInput
         for="date"
         label="Date"
         type="date"
-        value={props.event.dateUTC}
+        defaultValue={props.event.dateUTC}
       />
       <ShortInput
         for="starttime"
         label="Start Time"
         type="time"
-        value={props.event.time}
+        defaultValue={props.event.time}
       />
       <ShortInput
         for="endtime"
         label="End Time"
         type="time"
-        value={props.event.endTime}
+        defaultValue={props.event.endTime}
       />
       <ShortInput
         for="place"
         label="Venue"
         type="text"
-        value={props.event.place}
+        defaultValue={props.event.place}
       />
       <button className="event-det-but">Register</button>
     </div>
   );
 };
 
-const CardInfo = () => {
+const CardInfoOrg = () => {
   let det = useParams();
   const navigate = useNavigate();
   return (
@@ -95,4 +93,4 @@ const CardInfo = () => {
   );
 };
 
-export default CardInfo;
+export default CardInfoOrg;
