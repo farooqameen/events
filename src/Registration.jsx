@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "@firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 
 const GenderOptions = [
@@ -40,6 +40,7 @@ const Input = (props) => {
         type={props.type}
         name={props.for}
         id={props.for}
+        required
         className="input"
         value={props.value}
         onChange={(e) => props.setter(e.target.value)}
@@ -58,6 +59,7 @@ const ShortInput = (props) => {
         type={props.type}
         name={props.for}
         id={props.for}
+        required
         className="input"
         value={props.value}
         onChange={(e) => props.setter(e.target.value)}
@@ -76,6 +78,7 @@ const OptionInput = (props) => {
         name={props.for}
         id={props.for}
         className="input option"
+        required
         value={props.value}
         onChange={(e) => props.setter(e.target.value)}
       >
@@ -158,14 +161,7 @@ const MainFrame = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, emailIn, passwordIn);
-      const userDoc = (
-        await getDoc(doc(db, "users", auth.currentUser.uid))
-      ).data();
-      if (userDoc.roles.includes("org")) {
-        navigate("/org");
-      } else {
-        navigate("/dashboard");
-      }
+      navigate("/dashboard");
     } catch {
       setNotice("You entered a wrong username or password.");
     }
@@ -173,7 +169,7 @@ const MainFrame = () => {
 
   return (
     <div className="register-container">
-      <div className="sign-up">
+      <form className="sign-up" onSubmit={signupWithUsernameAndPassword}>
         <h2 className="register-head">Sign-Up</h2>
         <div className="name">
           <ShortInput
@@ -225,12 +221,9 @@ const MainFrame = () => {
           value={passwordUp}
           setter={setPasswordUp}
         />
-        <RegisterButton
-          text="Register"
-          onClick={signupWithUsernameAndPassword}
-        />
-      </div>
-      <div className="sign-in">
+        <RegisterButton text="Register" />
+      </form>
+      <form className="sign-in" onSubmit={loginWithEmailAndPassword}>
         <h2 className="register-head">Sign-In</h2>
         <div className="social-signin">
           <SocialButton social="Google" />
@@ -251,8 +244,8 @@ const MainFrame = () => {
           value={passwordIn}
           setter={setPasswordIn}
         />
-        <RegisterButton text="Sign-In" onClick={loginWithEmailAndPassword} />
-      </div>
+        <RegisterButton text="Sign-In" />
+      </form>
       {notice != "" && <p>{notice}</p>}
     </div>
   );

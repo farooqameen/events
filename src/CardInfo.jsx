@@ -8,8 +8,11 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  getDoc,
 } from "firebase/firestore";
 import { db, auth } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import CardInfoOrg from "./CardInfoOrg";
 
 const ShortInput = (props) => {
   return (
@@ -97,7 +100,7 @@ const Info = (props) => {
   );
 };
 
-const CardInfo = () => {
+const CardInfoUser = () => {
   let det = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState({});
@@ -130,6 +133,39 @@ const CardInfo = () => {
     };
   }, [navigate]);
   return <>{Object.keys(event).length > 0 && <Info event={event[0]} />}</>;
+};
+
+const CardInfo = () => {
+  const [userDoc, setUserDoc] = useState({});
+  const [uid, setUid] = useState();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid); // Set uid in state
+        console.log(user.uid);
+      } else {
+        navigate("/");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+  useEffect(() => {
+    const getUser = async () => {
+      const userDoc = (await getDoc(doc(db, "users", uid))).data();
+      setUserDoc(userDoc);
+    };
+    if (uid) {
+      getUser();
+    }
+  });
+  return (
+    <>
+      {Object.keys(userDoc).length > 0 &&
+        (userDoc.roles.includes("org") ? <CardInfoOrg /> : <CardInfoUser />)}
+    </>
+  );
 };
 
 export default CardInfo;

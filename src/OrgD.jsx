@@ -22,8 +22,13 @@ const Nav = () => {
       </li>
       <div className="nav-items">
         <li>
-          <NavLink to={"/org"} className="nav-link">
+          <NavLink to={"/dashboard"} className="nav-link">
             <h2 className="nav-item">Dashboard</h2>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to={"/profile"} className="nav-link">
+            <h2 className="nav-item">Profile</h2>
           </NavLink>
         </li>
       </div>
@@ -106,4 +111,5 @@ const OrgD = () => {
   );
 };
 
+export { Nav };
 export default OrgD;
