@@ -28,6 +28,7 @@ const Input = (props) => {
         type={props.type}
         name={props.for}
         id={props.for}
+        required
         className="input"
         value={props.value}
         onChange={(e) => props.setter(e.target.value)}
@@ -45,6 +46,7 @@ const OptionInput = (props) => {
       <select
         name={props.for}
         id={props.for}
+        required
         className="input option"
         value={props.value}
         onChange={(e) => props.setter(e.target.value)}
@@ -71,6 +73,7 @@ const ShortInput = (props) => {
         type={props.type}
         name={props.for}
         id={props.for}
+        required
         className="input"
         value={props.value}
         onChange={(e) => props.setter(e.target.value)}
@@ -108,8 +111,7 @@ const Info = (props) => {
     }
   };
 
-  const deleteEvent = async (e) => {
-    e.preventDefault();
+  const deleteEvent = async () => {
     try {
       await deleteDoc(doc(db, "events", props.event.id));
       navigate(-1);
@@ -119,15 +121,18 @@ const Info = (props) => {
   };
 
   return (
-    <div className="card-info-container">
+    <form className="card-info-container" onSubmit={(e) => saveChanges(e)}>
       <div className="event-det-options">
         <button
+          type="button"
           className="event-det-but delete"
-          onClick={(e) => deleteEvent(e)}
+          onClick={deleteEvent}
         >
           Delete
         </button>
-        <button className="event-det-but part">View Participants</button>
+        <button type="button" className="event-det-but part">
+          View Participants
+        </button>
       </div>
       <Input
         for="title"
@@ -144,6 +149,7 @@ const Info = (props) => {
           className="input text-area"
           name="description"
           id="description"
+          required
           rows="10"
           cols="100"
           value={description}
@@ -185,14 +191,10 @@ const Info = (props) => {
         value={place}
         setter={setPlace}
       />
-      <button
-        type="submit"
-        className="event-det-but"
-        onClick={(e) => saveChanges(e)}
-      >
+      <button type="submit" className="event-det-but">
         Create Event
       </button>
-    </div>
+    </form>
   );
 };
 

@@ -507,6 +507,7 @@ nav li:has(img) {
   background-color: #e1e2f3;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 100px;
+  max-width: 70%;
 }
 
 .regular-container .event-img {
@@ -589,6 +590,7 @@ nav li:has(img) {
   grid-area: search;
   height: 50px;
   width: 400px;
+  justify-self: right;
 }
 
 .events {
@@ -709,6 +711,32 @@ nav li:has(img) {
   box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.3);
 }
 
+.event-det-options {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 5px;
+}
+
+.event-det-but.delete {
+  background-color: #e74c3c;
+  width: 25%;
+}
+
+.event-det-but.delete:hover {
+  background-color: #c0392b;
+}
+
+.event-det-but.part {
+  background-color: #af7ac5;
+  width: 40%;
+}
+
+.event-det-but.part:hover {
+  background-color: #96629e;
+}
+
 .card-info-container {
   display: flex;
   flex-direction: column;
@@ -761,4 +789,12 @@ nav li:has(img) {
   cursor: pointer;
   background-color: #8fd140;
   box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.3);
+}
+
+.profile-page > .event-det-but.delete {
+  margin: 0 auto;
+  margin-top: 5px;
+  display: block;
+  width: 10%;
+  font-weight: 400;
 }

@@ -24,6 +24,7 @@ const App = () => {
             <Route path="new" element={<NewEvent />} />
           </Route>
           <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="new" element={<NewEvent />} />
             <Route path=":eventId" element={<CardInfo />} />
           </Route>
           <Route path="/browse" element={<Browse />}>

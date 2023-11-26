@@ -11,11 +11,14 @@ import {
   getDocs,
   orderBy,
   limit,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebase";
+import OrgD from "./OrgD";
 
-const Dashboard = () => {
+const DashboardUser = () => {
   let det = useParams();
   const navigate = useNavigate;
   const [featuredEvent, setFeaturedEvent] = useState({});
@@ -26,7 +29,7 @@ const Dashboard = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUid(user.uid); // Set uid in state
+        setUid(user.uid);
       } else {
         navigate("/");
       }
@@ -46,7 +49,6 @@ const Dashboard = () => {
       const featuredEventDoc = await getDocs(featuredEventQuery);
       let fetchedEvents = [];
       featuredEventDoc.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
         fetchedEvents.push(doc.data());
       });
       setFeaturedEvent(fetchedEvents);
@@ -60,7 +62,6 @@ const Dashboard = () => {
       const registedEventDoc = await getDocs(registeredEventQuery);
       fetchedEvents = [];
       registedEventDoc.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
         fetchedEvents.push(doc.data());
       });
       setRegisteredEvent(fetchedEvents);
@@ -73,7 +74,6 @@ const Dashboard = () => {
       const upcomingEventDoc = await getDocs(upcomingEventQuery);
       fetchedEvents = [];
       upcomingEventDoc.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
         fetchedEvents.push(doc.data());
       });
       setUpcomingEvent(fetchedEvents);
@@ -121,6 +121,38 @@ const Dashboard = () => {
           <Outlet />
         </div>
       )}
+    </>
+  );
+};
+
+const Dashboard = () => {
+  const [userDoc, setUserDoc] = useState({});
+  const [uid, setUid] = useState();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid);
+      } else {
+        navigate("/");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+  useEffect(() => {
+    const getUser = async () => {
+      const userDoc = (await getDoc(doc(db, "users", uid))).data();
+      setUserDoc(userDoc);
+    };
+    if (uid) {
+      getUser();
+    }
+  });
+  return (
+    <>
+      {Object.keys(userDoc).length > 0 &&
+        (userDoc.roles.includes("org") ? <OrgD /> : <DashboardUser />)}
     </>
   );
 };

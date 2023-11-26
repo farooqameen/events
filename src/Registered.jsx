@@ -4,7 +4,15 @@ import { EventContainer, Search } from "./Browse";
 import { Outlet, useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, query, getDocs, orderBy, where } from "firebase/firestore";
+import {
+  collection,
+  query,
+  getDocs,
+  orderBy,
+  where,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 const Registered = () => {
@@ -12,6 +20,7 @@ const Registered = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [uid, setUid] = useState(null);
+  const [user1, setUser] = useState({});
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -25,6 +34,21 @@ const Registered = () => {
 
     return () => unsubscribe();
   }, [navigate]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const userDoc = (await getDoc(doc(db, "users", uid))).data();
+      setUser(userDoc);
+    };
+    if (uid) {
+      getUser();
+      if (Object.keys(user1).length > 0) {
+        if (user1.roles.includes("org")) {
+          navigate("/dashboard");
+        }
+      }
+    }
+  });
 
   useEffect(() => {
     const fetchEvents = async () => {

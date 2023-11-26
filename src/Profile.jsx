@@ -1,4 +1,5 @@
 import Nav from "./Nav";
+import { Nav as NavOrg } from "./OrgD";
 import { user } from "./info";
 import {
   ShortInput,
@@ -6,20 +7,13 @@ import {
   EmploymentOptions,
   GenderOptions,
 } from "./Registration";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { getDoc, updateDoc, doc } from "firebase/firestore";
 import { db, auth } from "./firebase";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
-const Information = (props) => {
+const InformationUser = (props) => {
   const [firstName, setFirstName] = useState(props.user.firstName);
   const [lastName, setLastName] = useState(props.user.lastName);
   const [gender, setGender] = useState(props.user.gender);
@@ -87,10 +81,46 @@ const Information = (props) => {
   );
 };
 
+const InformationOrg = (props) => {
+  const [name, setName] = useState(props.user.name);
+
+  const saveChanges = async (e) => {
+    e.preventDefault();
+    try {
+      const EventRef = doc(db, "users", props.user.uid);
+      await updateDoc(EventRef, {
+        name: name,
+      });
+    } catch {
+      console.log("Something went wrong");
+    }
+  };
+  return (
+    <div className="acc-info">
+      <h2 className="info-head">Account Information</h2>
+      <ShortInput
+        for="Name"
+        label="Name"
+        type="text"
+        value={name}
+        setter={setName}
+      />
+      <button className="save-button" onClick={(e) => saveChanges(e)}>
+        Save Information
+      </button>
+    </div>
+  );
+};
+
 const Profile = () => {
   const [user1, setUser] = useState({});
   const [uid, setUid] = useState(null);
   const navigate = useNavigate();
+  const logOutUser = async (e) => {
+    e.preventDefault();
+    await signOut(auth);
+    navigate("/");
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -104,27 +134,43 @@ const Profile = () => {
     return () => unsubscribe();
   }, [navigate]);
   useEffect(() => {
-    const fetchEvents = async () => {
-      const eventsQuery = query(
-        collection(db, "users"),
-        where("uid", "==", uid),
-      );
-      const eventsDoc = await getDocs(eventsQuery);
-      const fetchedEvents = [];
-      eventsDoc.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        fetchedEvents.push(doc.data());
-      });
-      setUser(fetchedEvents);
-      console.log(user1);
+    const getUser = async () => {
+      const userDoc = (await getDoc(doc(db, "users", uid))).data();
+      setUser(userDoc);
     };
-    fetchEvents();
+    if (uid) {
+      getUser();
+    }
   });
   return (
-    <div className="profile-page">
-      <Nav user={user} />
-      {Object.keys(user1).length > 0 && <Information user={user1[0]} />}
-    </div>
+    <>
+      {Object.keys(user1).length > 0 &&
+        (user1.roles.includes("org") ? (
+          <div className="profile-page">
+            <NavOrg />
+            <InformationOrg user={user1} />
+            <button
+              type="button"
+              className="event-det-but delete"
+              onClick={logOutUser}
+            >
+              Signout
+            </button>
+          </div>
+        ) : (
+          <div className="profile-page">
+            <Nav user={user} />
+            <InformationUser user={user1} />
+            <button
+              type="button"
+              className="event-det-but delete"
+              onClick={logOutUser}
+            >
+              Signout
+            </button>
+          </div>
+        ))}
+    </>
   );
 };
 

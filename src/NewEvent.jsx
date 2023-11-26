@@ -19,6 +19,7 @@ const Input = (props) => {
         type={props.type}
         name={props.for}
         id={props.for}
+        required
         className="input"
         value={props.value}
         onChange={(e) => props.setter(e.target.value)}
@@ -37,6 +38,7 @@ const OptionInput = (props) => {
         name={props.for}
         id={props.for}
         className="input option"
+        required
         value={props.value}
         onChange={(e) => props.setter(e.target.value)}
       >
@@ -65,6 +67,7 @@ const ShortInput = (props) => {
         type={props.type}
         name={props.for}
         id={props.for}
+        required
         className="input"
         value={props.value}
         onChange={(e) => props.setter(e.target.value)}
@@ -110,7 +113,7 @@ const Info = () => {
     }
   };
   return (
-    <div className="card-info-container">
+    <form className="card-info-container" onSubmit={submitEvent}>
       <Input
         for="title"
         label="Title"
@@ -126,6 +129,7 @@ const Info = () => {
           className="input text-area"
           name="description"
           id="description"
+          required
           rows="10"
           cols="100"
           value={description}
@@ -167,14 +171,10 @@ const Info = () => {
         value={place}
         setter={setPlace}
       />
-      <button
-        type="submit"
-        className="event-det-but"
-        onClick={(e) => submitEvent(e)}
-      >
+      <button type="submit" className="event-det-but">
         Create Event
       </button>
-    </div>
+    </form>
   );
 };
 
